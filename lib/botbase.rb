@@ -9,32 +9,43 @@ require 'simple-config'
 
 class BotBase
   
-  def initialize(config=nil)
+  def initialize(config=nil, botname: 'Nicole')
 
+    @h = nil
 
     if config then
       
-      h = SimpleConfig.new(config).to_h      
-      
+      @h = SimpleConfig.new(config).to_h      
+
       # load the service modules
-      @modules = initialize_modules(h[:modules])
+      @modules = initialize_modules(@h[:modules])
       
     end
+    
+    @botname = botname
 
   end
   
   def received(sender='user01', msg)
 
+    self.restart if msg == @botname + ' restart'
+    
     r = nil
-    msg_recognised = @modules.detect do |m|
-      r = m.query msg
-    end
+    
+    msg_recognised = @modules.detect {|m| r = m.query msg }
     
     return r if msg_recognised
     
     ''
 
-  end  
+  end
+
+  def restart
+
+    puts 'restarting ...'
+    @modules = initialize_modules(@h[:modules]) if @h
+          
+  end
   
   private
   
