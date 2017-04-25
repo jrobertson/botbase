@@ -32,8 +32,7 @@ class BotBase
     
     r = nil
     
-    msg_recognised = @modules.detect {|m| r = m.query msg }
-    
+    msg_recognised = @modules.detect {|m| r = m.query(msg); r and r.length > 0 }
     return r if msg_recognised
     
     ''
