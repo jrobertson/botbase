@@ -26,13 +26,16 @@ class BotBase
 
   end
   
-  def received(sender='user01', msg)
+  def received(sender='user01', msg, mode: :voicechat)
 
     self.restart if msg == @botname + ' restart'
     
     r = nil
     
-    msg_recognised = @modules.detect {|m| r = m.query(msg); r and r.length > 0 }
+    msg_recognised = @modules.detect do |m| 
+      r = m.query(msg, mode: mode); r and r.length > 0 
+    end
+    
     return r if msg_recognised
     
     ''
