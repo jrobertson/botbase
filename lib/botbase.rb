@@ -9,7 +9,7 @@ require 'simple-config'
 
 class BotBase
   
-  def initialize(config=nil, botname: 'Nicole')
+  def initialize(config=nil, botname: 'Nicole', notifier: nil)
 
     @h = nil
 
@@ -22,12 +22,13 @@ class BotBase
       
     end
     
-    @botname = botname
+    @botname, @notifier = botname, notifier
 
   end
   
   def received(sender='user01', msg, mode: :voicechat)
 
+    msg.rstrip!
     self.restart if msg == @botname + ' restart'
     
     r = nil
@@ -46,6 +47,7 @@ class BotBase
 
     puts 'restarting ...'
     @modules = initialize_modules(@h[:modules]) if @h
+    @notifier.notice "echo: #{@botname} is now ready" if @notifier
           
   end
   
