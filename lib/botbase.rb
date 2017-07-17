@@ -26,7 +26,7 @@ class BotBase
 
   end
   
-  def received(sender='user01', msg, mode: :voicechat)
+  def received(sender='user01', msg, mode: :voicechat, echo_node: 'node1')
 
     msg.rstrip!
     self.restart if msg == @botname + ' restart'
@@ -34,7 +34,7 @@ class BotBase
     r = nil
     
     msg_recognised = @modules.detect do |m| 
-      r = m.query(msg, mode: mode); r and r.length > 0 
+      r = m.query(msg, mode: mode, echo_node: echo_node); r and r.length > 0 
     end
     
     return r if msg_recognised
